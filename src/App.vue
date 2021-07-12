@@ -1,19 +1,55 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <form>
+      <input v-model="title" placeholder="Title" required />
+      <textarea v-model="body" placeholder="Body" required />
+      <button @click.prevent="sendPost()">Submit post</button>
+    </form>
+
+    <ul>
+      <li>Id : {{post.id}}</li>
+      <li>Title: {{post.title}}</li>
+      <li>Body: {{post.body}}</li>
+      <li>User ID: {{post.userId}}</li>
+    </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data: function() {
+    return {
+      post: "",
+      title: "",
+      body: ""
+    };
+  },
+  methods: {
+    sendPost() {
+      const postData = { title: this.title, body: this.body };
+      // this.$http.post("https://jsonplaceholder.typicode.com/posts", postData)
+      //   .then(res => {
+      //     console.log(res.body);
+      // });
+      this.$http.post("posts", postData)
+      .then(res => {
+        console.log(res.body);
+      });
+    }
+  },
+  created() {
+    // this.$http.get("https://jsonplaceholder.typicode.com/posts/1")
+    // .then(res => {
+    //   this.post = res.body;
+    //   console.log(res.body);
+    // });
+    this.$http.get("posts/1")
+    .then(res => {
+      this.post = res.body;
+      console.log(res.body);
+    });
   }
-}
+};
 </script>
 
 <style>
